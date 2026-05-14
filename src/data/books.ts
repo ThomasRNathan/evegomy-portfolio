@@ -17,8 +17,8 @@ export const books: Book[] = [
     publisher: "Didier Jeunesse",
     description:
       "An album about difference and diversity, told through soft and luminous illustrations of an abundant, enveloping nature.",
-    cover: "/placeholders/book-1.jpg",
-    spreads: ["/placeholders/spread-1.jpg", "/placeholders/spread-2.jpg"],
+    cover: "/placeholders/book-1.svg",
+    spreads: ["/placeholders/spread-1.svg", "/placeholders/spread-2.svg"],
   },
   {
     id: "les-4-saisons",
@@ -26,7 +26,7 @@ export const books: Book[] = [
     year: 2024,
     description:
       "Four seasons traced through the slow rhythms of light, weather and gesture.",
-    cover: "/placeholders/book-2.jpg",
+    cover: "/placeholders/book-2.svg",
   },
   {
     id: "color-series-1",
@@ -34,7 +34,7 @@ export const books: Book[] = [
     series: "Color Series",
     year: 2023,
     description: "A meditation on a single colour across a day.",
-    cover: "/placeholders/book-3.jpg",
+    cover: "/placeholders/book-3.svg",
   },
   {
     id: "color-series-2",
@@ -42,7 +42,7 @@ export const books: Book[] = [
     series: "Color Series",
     year: 2023,
     description: "A meditation on a single colour across a day.",
-    cover: "/placeholders/book-4.jpg",
+    cover: "/placeholders/book-4.svg",
   },
   {
     id: "color-series-3",
@@ -50,6 +50,6 @@ export const books: Book[] = [
     series: "Color Series",
     year: 2023,
     description: "A meditation on a single colour across a day.",
-    cover: "/placeholders/book-5.jpg",
+    cover: "/placeholders/book-5.svg",
   },
 ];
