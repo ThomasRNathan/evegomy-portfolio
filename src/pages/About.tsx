@@ -42,11 +42,11 @@ export default function About() {
             </li>
           </ul>
 
-          <p className="eyebrow mt-12">Selected publishers</p>
+          <p className="eyebrow mt-12">Publishers</p>
           <ul className="mt-6 space-y-2 text-sm text-ink/80">
-            <li>Didier Jeunesse</li>
-            <li>Hachette</li>
-            <li>Seuil Jeunesse</li>
+            <li>Seuil Jeunesse <span className="text-muted">— Color Series</span></li>
+            <li>Didier Jeunesse <span className="text-muted">— Dans la nature</span></li>
+            <li>Franco Cosimo Panini <span className="text-muted">— Italian editions</span></li>
           </ul>
 
           <p className="eyebrow mt-12">Education</p>

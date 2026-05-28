@@ -26,6 +26,17 @@ export function BookCard({ book }: { book: Book }) {
       <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink/80">
         {book.description}
       </p>
+      {book.translations && book.translations.length > 0 ? (
+        <ul className="mt-3 space-y-1 text-xs text-muted">
+          {book.translations.map((t) => (
+            <li key={t.lang}>
+              <span className="uppercase tracking-widest">{t.lang}</span>{" — "}
+              <em className="not-italic text-ink/70">{t.title}</em>{" · "}
+              {t.publisher}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </article>
   );
 }
