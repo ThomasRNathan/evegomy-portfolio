@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { hero, mosaic } from "@/data/gallery";
 import { ImageMosaic } from "@/components/ImageMosaic";
-import { bio } from "@/data/bio";
+import { useT } from "@/i18n/strings";
 
 export default function Home() {
+  const t = useT();
   return (
     <>
       <section className="mx-auto max-w-[1400px] px-6 pt-6 md:px-10 md:pt-10">
@@ -19,50 +20,45 @@ export default function Home() {
         </div>
         <div className="mt-8 grid gap-6 md:grid-cols-12 md:gap-10">
           <div className="md:col-span-7">
-            <p className="eyebrow">{bio.role} — {bio.location}</p>
+            <p className="eyebrow">{t.home.role} — {t.home.location}</p>
             <h1 className="display mt-4 text-4xl leading-[1.05] md:text-6xl">
-              Books, illustrations and quiet objects —
-              <span className="font-jp"> 余白 </span>
-              between dawn and dusk.
+              {t.home.heroLeft}
+              <span className="font-jp"> {t.home.heroJp} </span>
+              {t.home.heroRight}
             </h1>
           </div>
           <p className="text-base leading-relaxed text-ink/80 md:col-span-5 md:pt-2">
-            {bio.short}
+            {t.home.bio}
           </p>
         </div>
       </section>
 
       <section className="mx-auto mt-16 max-w-[1400px] px-6 md:mt-24 md:px-10">
         <div className="mb-6 flex items-baseline justify-between md:mb-10">
-          <p className="eyebrow">Selected work</p>
-          <Link to="/portfolio" className="link-underline text-sm">
-            See all
+          <p className="eyebrow">{t.home.selectedWork}</p>
+          <Link to="/work" className="link-underline text-sm">
+            {t.home.seeAll}
           </Link>
         </div>
         <ImageMosaic items={mosaic} />
       </section>
 
       <section className="mx-auto mt-24 max-w-[1400px] px-6 md:mt-32 md:px-10">
-        <div className="grid gap-8 md:grid-cols-2 md:gap-16">
-          <Link
-            to="/portfolio"
-            className="group block border-t border-line pt-8"
-          >
-            <p className="eyebrow">01 — Portfolio</p>
-            <h2 className="display mt-3 text-3xl md:text-5xl">
-              Books, prints and illustrations.
-            </h2>
-            <span className="mt-6 inline-block link-underline text-sm">Enter</span>
+        <div className="grid gap-8 md:grid-cols-3 md:gap-10">
+          <Link to="/work" className="group block border-t border-line pt-8">
+            <p className="eyebrow">{t.home.sec1Eyebrow}</p>
+            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec1Title}</h2>
+            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec1Cta}</span>
           </Link>
-          <Link
-            to="/shop"
-            className="group block border-t border-line pt-8"
-          >
-            <p className="eyebrow">02 — Shop</p>
-            <h2 className="display mt-3 text-3xl md:text-5xl">
-              Foulards, skateboards, editions.
-            </h2>
-            <span className="mt-6 inline-block link-underline text-sm">Browse</span>
+          <Link to="/books" className="group block border-t border-line pt-8">
+            <p className="eyebrow">{t.home.sec2Eyebrow}</p>
+            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec2Title}</h2>
+            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec2Cta}</span>
+          </Link>
+          <Link to="/objects" className="group block border-t border-line pt-8">
+            <p className="eyebrow">{t.home.sec3Eyebrow}</p>
+            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec3Title}</h2>
+            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec3Cta}</span>
           </Link>
         </div>
       </section>

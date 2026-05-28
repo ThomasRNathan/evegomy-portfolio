@@ -1,12 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
 
+// Keep this in sync with src/data/objects.ts — buyable items only.
 const PRODUCTS: Record<string, { name: string; priceCents: number; currency: string }> = {
-  "foulard-aube": { name: "Foulard — Aube", priceCents: 22000, currency: "eur" },
-  "foulard-crepuscule": { name: "Foulard — Crépuscule", priceCents: 22000, currency: "eur" },
-  "skate-lune": { name: "Skateboard — Lune", priceCents: 18000, currency: "eur" },
-  "skate-soleil": { name: "Skateboard — Soleil", priceCents: 18000, currency: "eur" },
-  "print-sieste": { name: "La sieste — Serigraph", priceCents: 35000, currency: "eur" },
+  "foulard-aube":           { name: "Foulard — Aube",            priceCents: 22000, currency: "eur" },
+  "foulard-crepuscule":     { name: "Foulard — Crépuscule",      priceCents: 22000, currency: "eur" },
+  "skate-lune":             { name: "Skateboard — Lune",          priceCents: 18000, currency: "eur" },
+  "skate-soleil":           { name: "Skateboard — Soleil",        priceCents: 18000, currency: "eur" },
+  "poster-series-bleu":     { name: "Affiche — Series Bleu",      priceCents:  5000, currency: "eur" },
+  "poster-salon-livre":     { name: "Affiche — Salon du livre",   priceCents:  5000, currency: "eur" },
+  "poster-filles-qui-dorment": { name: "Affiche — Filles qui dorment", priceCents: 5000, currency: "eur" },
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -42,9 +45,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           quantity: Math.max(1, Math.min(5, quantity ?? 1)),
         },
       ],
-      success_url: `${origin}/shop?status=success`,
-      cancel_url: `${origin}/shop?status=cancelled`,
-      shipping_address_collection: { allowed_countries: ["FR", "BE", "LU", "CH", "DE", "IT", "ES", "NL", "GB", "US", "CA"] },
+      success_url: `${origin}/objects?status=success`,
+      cancel_url: `${origin}/objects?status=cancelled`,
+      shipping_address_collection: {
+        allowed_countries: ["FR", "BE", "LU", "CH", "DE", "IT", "ES", "NL", "GB", "US", "CA"],
+      },
     });
     return res.status(200).json({ url: session.url });
   } catch (err) {
