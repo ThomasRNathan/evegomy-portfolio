@@ -24,13 +24,13 @@ export function ImageMosaic({ items }: { items: GalleryItem[] }) {
             src={item.src}
             alt={item.alt}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
             }}
           />
-          <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-ink/70 to-transparent p-3 text-xs text-ivory opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            {item.alt}
+          <figcaption className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-ink/75 via-ink/10 to-transparent p-3 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <span className="text-xs leading-snug text-ivory">{item.alt}</span>
           </figcaption>
         </figure>
       ))}

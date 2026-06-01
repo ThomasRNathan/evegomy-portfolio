@@ -2,13 +2,17 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
 
 // Keep this in sync with src/data/objects.ts — buyable items only.
-const PRODUCTS: Record<string, { name: string; priceCents: number; currency: string }> = {
-  "foulard-aube":              { name: "Foulard — Aube",            priceCents: 22000, currency: "eur" },
-  "foulard-crepuscule":        { name: "Foulard — Crépuscule",      priceCents: 22000, currency: "eur" },
-  "skate-lune":                { name: "Skateboard — hand-painted", priceCents: 18000, currency: "eur" },
-  "poster-series-bleu":        { name: "Affiche — Series Bleu",     priceCents:  5000, currency: "eur" },
-  "poster-salon-livre":        { name: "Affiche — Salon du livre",  priceCents:  5000, currency: "eur" },
-  "poster-filles-qui-dorment": { name: "Affiche — Filles qui dorment", priceCents: 5000, currency: "eur" },
+const PRODUCTS: Record<
+  string,
+  { name: string; priceCents: number; currency: string; madeToOrder?: boolean }
+> = {
+  "foulard-aube":              { name: "Foulard — Aube",                priceCents: 22000, currency: "eur" },
+  "foulard-crepuscule":        { name: "Foulard — Crépuscule",          priceCents: 22000, currency: "eur" },
+  "skate-lune":                { name: "Skateboard — hand-painted",     priceCents: 50000, currency: "eur" },
+  "skate-custom":              { name: "Skateboard — made to order",    priceCents: 100000, currency: "eur", madeToOrder: true },
+  "poster-series-bleu":        { name: "Poster — Series Bleu",          priceCents:  5000, currency: "eur" },
+  "poster-salon-livre":        { name: "Poster — Salon du livre",       priceCents:  5000, currency: "eur" },
+  "poster-filles-qui-dorment": { name: "Poster — Filles qui dorment",   priceCents:  5000, currency: "eur" },
 };
 
 type IncomingItem = { productId?: string; quantity?: number };
@@ -40,11 +44,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+  let containsMadeToOrder = false;
   for (const it of items) {
     const product = it.productId ? PRODUCTS[it.productId] : undefined;
     if (!product) {
       return res.status(400).json({ error: `Unknown product: ${it.productId ?? "?"}` });
     }
+    if (product.madeToOrder) containsMadeToOrder = true;
     const qty = Math.max(1, Math.min(5, it.quantity ?? 1));
     lineItems.push({
       price_data: {
@@ -64,11 +70,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
-      success_url: `${origin}/shop?status=success`,
+      success_url: `${origin}/shop/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/shop?status=cancelled`,
       shipping_address_collection: {
         allowed_countries: ["FR", "BE", "LU", "CH", "DE", "IT", "ES", "NL", "GB", "US", "CA"],
       },
+      phone_number_collection: { enabled: containsMadeToOrder },
+      metadata: containsMadeToOrder ? { madeToOrder: "true" } : undefined,
     });
     return res.status(200).json({ url: session.url });
   } catch (err) {
