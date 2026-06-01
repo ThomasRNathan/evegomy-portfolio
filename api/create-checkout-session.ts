@@ -5,8 +5,7 @@ import Stripe from "stripe";
 const PRODUCTS: Record<string, { name: string; priceCents: number; currency: string }> = {
   "foulard-aube":           { name: "Foulard — Aube",            priceCents: 22000, currency: "eur" },
   "foulard-crepuscule":     { name: "Foulard — Crépuscule",      priceCents: 22000, currency: "eur" },
-  "skate-lune":             { name: "Skateboard — Lune",          priceCents: 18000, currency: "eur" },
-  "skate-soleil":           { name: "Skateboard — Soleil",        priceCents: 18000, currency: "eur" },
+  "skate-lune":             { name: "Skateboard — hand-painted",  priceCents: 18000, currency: "eur" },
   "poster-series-bleu":     { name: "Affiche — Series Bleu",      priceCents:  5000, currency: "eur" },
   "poster-salon-livre":     { name: "Affiche — Salon du livre",   priceCents:  5000, currency: "eur" },
   "poster-filles-qui-dorment": { name: "Affiche — Filles qui dorment", priceCents: 5000, currency: "eur" },

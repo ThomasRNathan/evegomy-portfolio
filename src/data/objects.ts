@@ -32,6 +32,8 @@ export const objects: WorkItem[] = [
       es: "Cuatro etiquetas ilustradas para la casa francesa de té Le Parti du Thé.",
     },
     images: ["/placeholders/collab-tea.jpg"],
+    blurred: true,
+    comingSoon: true,
   },
   {
     id: "bedding",
@@ -129,28 +131,13 @@ export const objects: WorkItem[] = [
   {
     id: "skate-lune",
     category: "Skateboards",
-    title: { fr: "Skateboard — Lune", en: "Skateboard — Moon", es: "Skate — Luna" },
+    title: { fr: "Skateboard peint à la main", en: "Hand-painted skateboard", es: "Skate pintado a mano" },
     description: {
       fr: "Planche en érable peinte à la main, 8.25\". Signée et numérotée. Pièce unique.",
       en: "Hand-painted maple skateboard deck, 8.25\". Signed and numbered. One of a kind.",
       es: "Tabla de skate de arce pintada a mano, 8.25\". Firmada y numerada. Pieza única.",
     },
     images: ["/placeholders/skate-1.jpg"],
-    priceCents: 18000,
-    currency: "EUR",
-    inStock: true,
-    edition: { fr: "Pièce unique, numérotée", en: "One of a kind, numbered", es: "Pieza única, numerada" },
-  },
-  {
-    id: "skate-soleil",
-    category: "Skateboards",
-    title: { fr: "Skateboard — Soleil", en: "Skateboard — Sun", es: "Skate — Sol" },
-    description: {
-      fr: "Planche en érable peinte à la main, 8.25\". Signée et numérotée. Pièce unique.",
-      en: "Hand-painted maple skateboard deck, 8.25\". Signed and numbered. One of a kind.",
-      es: "Tabla de skate de arce pintada a mano, 8.25\". Firmada y numerada. Pieza única.",
-    },
-    images: ["/placeholders/skate-2.jpg"],
     priceCents: 18000,
     currency: "EUR",
     inStock: true,

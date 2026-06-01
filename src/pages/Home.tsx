@@ -43,25 +43,6 @@ export default function Home() {
         <ImageMosaic items={mosaic} />
       </section>
 
-      <section className="mx-auto mt-24 max-w-[1400px] px-6 md:mt-32 md:px-10">
-        <div className="grid gap-8 md:grid-cols-3 md:gap-10">
-          <Link to="/work" className="group block border-t border-line pt-8">
-            <p className="eyebrow">{t.home.sec1Eyebrow}</p>
-            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec1Title}</h2>
-            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec1Cta}</span>
-          </Link>
-          <Link to="/books" className="group block border-t border-line pt-8">
-            <p className="eyebrow">{t.home.sec2Eyebrow}</p>
-            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec2Title}</h2>
-            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec2Cta}</span>
-          </Link>
-          <Link to="/objects" className="group block border-t border-line pt-8">
-            <p className="eyebrow">{t.home.sec3Eyebrow}</p>
-            <h2 className="display mt-3 text-2xl md:text-4xl">{t.home.sec3Title}</h2>
-            <span className="mt-6 inline-block link-underline text-sm">{t.home.sec3Cta}</span>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
