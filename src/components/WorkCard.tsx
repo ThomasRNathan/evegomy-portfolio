@@ -1,39 +1,13 @@
-import { useState } from "react";
 import type { WorkItem } from "@/data/objects";
 import { formatPrice, cn } from "@/lib/utils";
 import { useLocale } from "@/i18n";
 import { useT } from "@/i18n/strings";
-
-async function startCheckout(item: WorkItem) {
-  const res = await fetch("/api/create-checkout-session", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId: item.id, quantity: 1 }),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || "Checkout failed");
-  }
-  const { url } = (await res.json()) as { url: string };
-  window.location.href = url;
-}
+import { useCart } from "@/cart";
 
 export function WorkCard({ item }: { item: WorkItem }) {
   const { locale } = useLocale();
   const t = useT();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const onBuy = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await startCheckout(item);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error");
-      setLoading(false);
-    }
-  };
+  const { addItem } = useCart();
 
   const buyable = !item.comingSoon && !!item.priceCents;
 
@@ -77,15 +51,14 @@ export function WorkCard({ item }: { item: WorkItem }) {
         {item.description[locale]}
       </p>
       {buyable ? (
-        <div className="mt-5 flex items-center gap-4">
+        <div className="mt-5">
           <button
-            onClick={onBuy}
-            disabled={loading || !item.inStock}
+            onClick={() => addItem(item.id)}
+            disabled={!item.inStock}
             className="border border-ink px-5 py-2 text-xs uppercase tracking-widest text-ink transition-colors hover:bg-ink hover:text-ivory disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {!item.inStock ? t.objects.soldOut : loading ? t.objects.loading : t.objects.addToBag}
+            {!item.inStock ? t.objects.soldOut : t.objects.addToCart}
           </button>
-          {error ? <span className="text-xs text-terracotta">{error}</span> : null}
         </div>
       ) : null}
     </article>

@@ -5,11 +5,29 @@ export type Strings = typeof strings.en;
 export const strings = {
   en: {
     nav: {
+      shop: "Shop",
       work: "All Work",
       books: "Books",
       objects: "Objects & collaborations",
       about: "About",
       contact: "Contact",
+    },
+    cart: {
+      title: "Cart",
+      empty: "Your cart is empty.",
+      subtotal: "Subtotal",
+      shippingNote: "Shipping & taxes calculated at checkout.",
+      checkout: "Pay now",
+      continueShopping: "Continue shopping",
+      remove: "Remove",
+      close: "Close",
+      loading: "Loading…",
+    },
+    shop: {
+      title: "Shop",
+      eyebrow: "Shop",
+      intro: "Posters, foulards and hand-painted skateboards — limited editions, signed and numbered, shipped from Paris.",
+      filters: { all: "All", posters: "Posters", foulards: "Foulards", skateboards: "Skateboards" },
     },
     home: {
       role: "Author & Illustrator",
@@ -44,6 +62,7 @@ export const strings = {
       filters: { all: "All", posters: "Posters", foulards: "Foulards", skateboards: "Skateboards", collaborations: "Collaborations" },
       comingSoon: "Coming soon",
       addToBag: "Add to bag",
+      addToCart: "Add to cart",
       soldOut: "Sold out",
       loading: "Loading…",
     },
@@ -74,11 +93,29 @@ export const strings = {
   },
   fr: {
     nav: {
+      shop: "Boutique",
       work: "Portfolio",
       books: "Livres",
       objects: "Objets & collaborations",
       about: "À propos",
       contact: "Contact",
+    },
+    cart: {
+      title: "Panier",
+      empty: "Votre panier est vide.",
+      subtotal: "Sous-total",
+      shippingNote: "Frais de port et taxes calculés au paiement.",
+      checkout: "Payer",
+      continueShopping: "Continuer mes achats",
+      remove: "Retirer",
+      close: "Fermer",
+      loading: "Chargement…",
+    },
+    shop: {
+      title: "Boutique",
+      eyebrow: "Boutique",
+      intro: "Affiches, foulards et skateboards peints à la main — éditions limitées, signées et numérotées, expédiées depuis Paris.",
+      filters: { all: "Tout", posters: "Affiches", foulards: "Foulards", skateboards: "Skateboards" },
     },
     home: {
       role: "Autrice & illustratrice",
@@ -113,6 +150,7 @@ export const strings = {
       filters: { all: "Tout", posters: "Affiches", foulards: "Foulards", skateboards: "Skateboards", collaborations: "Collaborations" },
       comingSoon: "Bientôt",
       addToBag: "Ajouter au panier",
+      addToCart: "Ajouter au panier",
       soldOut: "Épuisé",
       loading: "Chargement…",
     },
@@ -143,11 +181,29 @@ export const strings = {
   },
   es: {
     nav: {
+      shop: "Tienda",
       work: "Portfolio",
       books: "Libros",
       objects: "Objetos y colaboraciones",
       about: "Acerca",
       contact: "Contacto",
+    },
+    cart: {
+      title: "Cesta",
+      empty: "Tu cesta está vacía.",
+      subtotal: "Subtotal",
+      shippingNote: "Envío e impuestos calculados al pagar.",
+      checkout: "Pagar ahora",
+      continueShopping: "Seguir comprando",
+      remove: "Quitar",
+      close: "Cerrar",
+      loading: "Cargando…",
+    },
+    shop: {
+      title: "Tienda",
+      eyebrow: "Tienda",
+      intro: "Carteles, foulards y skates pintados a mano — ediciones limitadas, firmadas y numeradas, enviadas desde París.",
+      filters: { all: "Todo", posters: "Carteles", foulards: "Foulards", skateboards: "Skates" },
     },
     home: {
       role: "Autora e ilustradora",
@@ -182,6 +238,7 @@ export const strings = {
       filters: { all: "Todo", posters: "Carteles", foulards: "Foulards", skateboards: "Skates", collaborations: "Colaboraciones" },
       comingSoon: "Próximamente",
       addToBag: "Añadir",
+      addToCart: "Añadir a la cesta",
       soldOut: "Agotado",
       loading: "Cargando…",
     },

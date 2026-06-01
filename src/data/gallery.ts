@@ -7,8 +7,8 @@ export type GalleryItem = {
 
 export const hero: GalleryItem = {
   id: "hero",
-  src: "/placeholders/eve-dln-soleil-pluie.jpg",
-  alt: "Dans la nature — title spread (Didier Jeunesse, 2025)",
+  src: "/placeholders/eve-dln-petits.jpg",
+  alt: "Dans la nature — panthère spread (Didier Jeunesse, 2025)",
 };
 
 // Curated mosaic of Eve's actual work — interior illustrations,
