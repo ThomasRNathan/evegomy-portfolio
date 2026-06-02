@@ -8,11 +8,9 @@ type CarouselImage = {
 
 export function Carousel({
   images,
-  aspect = "aspect-[4/3]",
   blurred = false,
 }: {
   images: CarouselImage[];
-  aspect?: string;
   blurred?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -32,9 +30,13 @@ export function Carousel({
     if (!el) return;
     el.addEventListener("scroll", updateButtons, { passive: true });
     window.addEventListener("resize", updateButtons);
+    // Recompute after each image loads (natural widths change after layout).
+    const imgs = el.querySelectorAll("img");
+    imgs.forEach((img) => img.addEventListener("load", updateButtons));
     return () => {
       el.removeEventListener("scroll", updateButtons);
       window.removeEventListener("resize", updateButtons);
+      imgs.forEach((img) => img.removeEventListener("load", updateButtons));
     };
   }, [updateButtons, images.length]);
 
@@ -54,7 +56,9 @@ export function Carousel({
       <div
         ref={trackRef}
         className={cn(
-          "flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth",
+          "flex h-[55vh] min-h-[320px] max-h-[600px] snap-x snap-mandatory items-stretch gap-3 overflow-x-auto scroll-smooth",
+          "md:h-[60vh] md:max-h-[680px] md:gap-4",
+          single && "justify-center",
           "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         )}
       >
@@ -62,18 +66,14 @@ export function Carousel({
           <figure
             key={i}
             data-slide
-            className={cn(
-              "relative shrink-0 snap-start overflow-hidden bg-cream",
-              aspect,
-              single ? "w-full" : "w-[88%] sm:w-[72%] md:w-[78%] lg:w-[82%]"
-            )}
+            className="relative h-full shrink-0 snap-start overflow-hidden bg-cream"
           >
             <img
               src={img.src}
               alt={img.alt}
               loading={i === 0 ? "eager" : "lazy"}
               className={cn(
-                "h-full w-full object-contain",
+                "block h-full w-auto max-w-none",
                 blurred && "scale-110 blur-2xl"
               )}
               onError={(e) => {
@@ -92,7 +92,7 @@ export function Carousel({
             onClick={() => scrollBy(-1)}
             disabled={!canPrev}
             className={cn(
-              "absolute left-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink backdrop-blur transition-opacity hover:bg-ivory",
+              "absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink shadow-sm backdrop-blur transition-opacity hover:bg-ivory",
               !canPrev && "pointer-events-none opacity-0"
             )}
           >
@@ -106,7 +106,7 @@ export function Carousel({
             onClick={() => scrollBy(1)}
             disabled={!canNext}
             className={cn(
-              "absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink backdrop-blur transition-opacity hover:bg-ivory",
+              "absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink shadow-sm backdrop-blur transition-opacity hover:bg-ivory",
               !canNext && "pointer-events-none opacity-0"
             )}
           >

@@ -48,7 +48,7 @@ export function ProjectBanner({
         {ctas ? <div className="mt-6 flex flex-wrap items-center gap-4">{ctas}</div> : null}
       </div>
       <div className={reverse ? "md:order-1 md:col-span-7" : "md:col-span-7"}>
-        <Carousel images={images} aspect="aspect-[3/2]" blurred={blurred} />
+        <Carousel images={images} blurred={blurred} />
       </div>
     </article>
   );
