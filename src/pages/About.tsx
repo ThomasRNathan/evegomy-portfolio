@@ -48,6 +48,10 @@ export default function About() {
               Franco Cosimo Panini{" "}
               <span className="text-muted">— Italian editions</span>
             </li>
+            <li>
+              Leetra{" "}
+              <span className="text-muted">— Spanish editions (México)</span>
+            </li>
           </ul>
 
           <p className="eyebrow mt-12">{t.about.education}</p>

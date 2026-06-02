@@ -93,11 +93,13 @@ export const books: Book[] = [
     ],
     translations: [
       { lang: "Italian", title: "Il gatto che amava il giallo", publisher: "Franco Cosimo Panini" },
+      { lang: "Spanish", title: "El gato que amaba el amarillo", publisher: "Leetra" },
     ],
     purchaseLinks: [
       { retailer: "Seuil Jeunesse", url: "https://www.seuiljeunesse.com/livre/le-chat-qui-aimait-le-jaune/", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=chat+qui+aimait+jaune+eve+gomy", region: "FR" },
       { retailer: "IBS (Italia)", url: "https://www.ibs.it/gatto-che-amava-giallo-ediz-libro-eve-gomy/e/9788857020440", region: "IT" },
+      { retailer: "Leetra (México)", url: "https://leetra.com/nuestra-coleccion-libros-ilustrados/", region: "ES" },
     ],
   },
   {
@@ -122,11 +124,13 @@ export const books: Book[] = [
     ],
     translations: [
       { lang: "Italian", title: "La rana che amava il rosso", publisher: "Franco Cosimo Panini" },
+      { lang: "Spanish", title: "La rana que amaba el rojo", publisher: "Leetra" },
     ],
     purchaseLinks: [
       { retailer: "Seuil Jeunesse", url: "https://www.seuiljeunesse.com/auteur/eve-gomy/37390", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=grenouille+qui+aimait+rouge+eve+gomy", region: "FR" },
       { retailer: "IBS (Italia)", url: "https://www.ibs.it/rana-che-amava-rosso-ediz-libro-eve-gomy/e/9788857020457", region: "IT" },
+      { retailer: "Leetra (México)", url: "https://leetra.com/nuestra-coleccion-libros-ilustrados/", region: "ES" },
     ],
   },
   {
@@ -150,11 +154,13 @@ export const books: Book[] = [
     ],
     translations: [
       { lang: "Italian", title: "Lo scoiattolo che amava il blu", publisher: "Franco Cosimo Panini" },
+      { lang: "Spanish", title: "La ardilla que amaba el azul", publisher: "Leetra" },
     ],
     purchaseLinks: [
       { retailer: "Seuil Jeunesse", url: "https://www.seuiljeunesse.com/auteur/eve-gomy/37390", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=ecureuil+qui+aimait+bleu+eve+gomy", region: "FR" },
       { retailer: "IBS (Italia)", url: "https://www.ibs.it/scoiattolo-che-amava-blu-ediz-libro-eve-gomy/e/9788857021621", region: "IT" },
+      { retailer: "Leetra (México)", url: "https://leetra.com/nuestra-coleccion-libros-ilustrados/", region: "ES" },
     ],
   },
   {
@@ -174,11 +180,13 @@ export const books: Book[] = [
     ],
     translations: [
       { lang: "Italian", title: "Il topino che amava il rosa", publisher: "Franco Cosimo Panini" },
+      { lang: "Spanish", title: "El ratón que amaba el rosa", publisher: "Leetra" },
     ],
     purchaseLinks: [
       { retailer: "Seuil Jeunesse", url: "https://www.seuiljeunesse.com/auteur/eve-gomy/37390", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=souris+qui+aimait+rose+eve+gomy", region: "FR" },
       { retailer: "IBS (Italia)", url: "https://www.ibs.it/topino-che-amava-rosa-ediz-libro-eve-gomy/e/9788857021638", region: "IT" },
+      { retailer: "Leetra (México)", url: "https://leetra.com/nuestra-coleccion-libros-ilustrados/", region: "ES" },
     ],
   },
 ];
