@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { objects } from "@/data/objects";
 import { useLocale } from "@/i18n";
@@ -12,10 +12,28 @@ export default function ProductDetail() {
   const { locale } = useLocale();
   const t = useT();
   const { addItem, openCart } = useCart();
-  const [activeImage, setActiveImage] = useState(0);
   const [added, setAdded] = useState(false);
 
   const item = objects.find((o) => o.id === id);
+  const variants = item?.variants ?? [];
+  const hasVariants = variants.length > 0;
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+    hasVariants ? variants[0].id : null
+  );
+  const selectedVariant = useMemo(
+    () => variants.find((v) => v.id === selectedVariantId) ?? null,
+    [variants, selectedVariantId]
+  );
+
+  // Build the gallery: when variants exist, the carousel becomes the variant images
+  // and the selected variant drives the main image. Otherwise plain images[].
+  const gallery = item ? (hasVariants ? variants.map((v) => v.image) : item.images) : [];
+  const activeIndex = hasVariants
+    ? Math.max(0, variants.findIndex((v) => v.id === selectedVariantId))
+    : 0;
+  const [thumbIndex, setThumbIndex] = useState(0);
+  const mainImageIndex = hasVariants ? activeIndex : thumbIndex;
+
   if (!item) {
     return (
       <section className="mx-auto max-w-[1400px] px-6 pt-20 md:px-10">
@@ -29,12 +47,16 @@ export default function ProductDetail() {
   }
 
   const buyable = !item.comingSoon && !!item.priceCents;
-  const editionLine = (() => {
+  const editionLineString = (() => {
     if (item.madeToOrder && item.leadTime) {
       return `${t.edition.madeToOrder} — ${item.leadTime[locale]}`;
     }
     if (item.editionSize === 1) return t.edition.unique;
-    if (item.editionRemaining != null && item.editionSize && item.editionRemaining < item.editionSize) {
+    if (
+      item.editionRemaining != null &&
+      item.editionSize &&
+      item.editionRemaining < item.editionSize
+    ) {
       return t.edition.remaining(item.editionRemaining, item.editionSize);
     }
     if (item.editionSize) return t.edition.ofN(item.editionSize);
@@ -42,12 +64,12 @@ export default function ProductDetail() {
   })();
 
   const onAdd = () => {
-    addItem(item.id);
+    addItem(item.id, selectedVariant?.id);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1500);
   };
   const onBuyNow = () => {
-    addItem(item.id);
+    addItem(item.id, selectedVariant?.id);
     openCart();
   };
 
@@ -65,26 +87,34 @@ export default function ProductDetail() {
         <div className="md:col-span-7">
           <div className="relative aspect-[4/5] overflow-hidden bg-cream">
             <img
-              src={item.images[activeImage]}
+              src={gallery[mainImageIndex]}
               alt={item.title[locale]}
               className={cn(
-                "h-full w-full object-cover",
+                "h-full w-full object-contain",
                 item.blurred && "scale-110 blur-2xl"
               )}
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).style.display = "none";
               }}
             />
+            {item.comingSoon ? (
+              <div className="pointer-events-none absolute left-4 top-4 z-10">
+                <span className="bg-ink/85 px-3 py-1.5 text-[0.65rem] uppercase tracking-widest text-ivory backdrop-blur-sm">
+                  {t.objects.comingSoon}
+                </span>
+              </div>
+            ) : null}
           </div>
-          {item.images.length > 1 ? (
+          {/* Thumbnails — only for non-variant gallery (variant picker handles its own) */}
+          {!hasVariants && gallery.length > 1 ? (
             <div className="mt-3 grid grid-cols-5 gap-3">
-              {item.images.map((src, i) => (
+              {gallery.map((src, i) => (
                 <button
                   key={src}
-                  onClick={() => setActiveImage(i)}
+                  onClick={() => setThumbIndex(i)}
                   className={cn(
                     "aspect-square overflow-hidden bg-cream",
-                    i === activeImage ? "outline outline-1 outline-ink" : "opacity-70 hover:opacity-100"
+                    i === thumbIndex ? "outline outline-1 outline-ink" : "opacity-70 hover:opacity-100"
                   )}
                 >
                   <img src={src} alt="" className="h-full w-full object-cover" />
@@ -105,15 +135,52 @@ export default function ProductDetail() {
               {formatPrice(item.priceCents, item.currency ?? "EUR")}
             </p>
           ) : null}
-          {editionLine ? (
+          {editionLineString ? (
             <p className="mt-2 text-xs uppercase tracking-widest text-muted">
-              {editionLine}
+              {editionLineString}
             </p>
           ) : null}
 
           <p className="mt-6 text-base leading-relaxed text-ink/85">
             {(item.longDescription ?? item.description)[locale]}
           </p>
+
+          {/* Variant selector */}
+          {hasVariants ? (
+            <div className="mt-8 border-t border-line pt-6">
+              <p className="eyebrow mb-3">
+                {t.pdp.pickVariant}
+                {selectedVariant ? (
+                  <span className="ml-2 normal-case tracking-normal text-ink">
+                    — {selectedVariant.name[locale]}
+                  </span>
+                ) : null}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {variants.map((v) => {
+                  const selected = v.id === selectedVariantId;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setSelectedVariantId(v.id)}
+                      className={cn(
+                        "group flex items-center gap-2 border px-2 py-2 text-xs uppercase tracking-widest transition-colors",
+                        selected
+                          ? "border-ink bg-ink text-ivory"
+                          : "border-line text-ink hover:border-ink"
+                      )}
+                    >
+                      <span className="h-9 w-9 shrink-0 overflow-hidden bg-cream">
+                        <img src={v.image} alt="" className="h-full w-full object-cover" />
+                      </span>
+                      <span className="pr-1">{v.name[locale]}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
 
           {buyable ? (
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">

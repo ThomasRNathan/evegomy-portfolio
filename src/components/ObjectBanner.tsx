@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { WorkItem } from "@/data/objects";
+import { workItemImages, type WorkItem } from "@/data/objects";
 import { formatPrice, cn } from "@/lib/utils";
 import { useLocale } from "@/i18n";
 import { useT } from "@/i18n/strings";
@@ -33,11 +33,14 @@ export function ObjectBanner({ item, reverse }: { item: WorkItem; reverse?: bool
   const { addItem } = useCart();
   const [pulse, setPulse] = useState(false);
 
-  const images = item.images.map((src) => ({ src, alt: item.title[locale] }));
+  const images = workItemImages(item).map((src) => ({ src, alt: item.title[locale] }));
   const buyable = !item.comingSoon && !!item.priceCents;
+  const hasVariants = !!(item.variants && item.variants.length > 0);
   const ed = editionLine(item, t, locale);
 
   const onAdd = () => {
+    // If the item has multiple variants, send the buyer to the PDP to choose.
+    if (hasVariants) return;
     addItem(item.id);
     setPulse(true);
     window.setTimeout(() => setPulse(false), 700);
@@ -70,24 +73,33 @@ export function ObjectBanner({ item, reverse }: { item: WorkItem; reverse?: bool
       }
       ctas={
         buyable ? (
-          <>
-            <button
-              onClick={onAdd}
-              disabled={!item.inStock}
-              className={cn(
-                "border border-ink px-5 py-2 text-xs uppercase tracking-widest text-ink transition-all hover:bg-ink hover:text-ivory disabled:cursor-not-allowed disabled:opacity-40",
-                pulse && "bg-ink text-ivory scale-[1.03]"
-              )}
-            >
-              {!item.inStock ? t.objects.soldOut : pulse ? t.pdp.added : t.objects.addToCart}
-            </button>
+          hasVariants ? (
             <Link
               to={`/shop/${item.id}`}
-              className="link-underline text-xs uppercase tracking-widest text-muted"
+              className="border border-ink px-5 py-2 text-xs uppercase tracking-widest text-ink transition-colors hover:bg-ink hover:text-ivory"
             >
-              {t.pdp.details}
+              {t.pdp.pickVariant} →
             </Link>
-          </>
+          ) : (
+            <>
+              <button
+                onClick={onAdd}
+                disabled={!item.inStock}
+                className={cn(
+                  "border border-ink px-5 py-2 text-xs uppercase tracking-widest text-ink transition-all hover:bg-ink hover:text-ivory disabled:cursor-not-allowed disabled:opacity-40",
+                  pulse && "bg-ink text-ivory scale-[1.03]"
+                )}
+              >
+                {!item.inStock ? t.objects.soldOut : pulse ? t.pdp.added : t.objects.addToCart}
+              </button>
+              <Link
+                to={`/shop/${item.id}`}
+                className="link-underline text-xs uppercase tracking-widest text-muted"
+              >
+                {t.pdp.details}
+              </Link>
+            </>
+          )
         ) : null
       }
     />

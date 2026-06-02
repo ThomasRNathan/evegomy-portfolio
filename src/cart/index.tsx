@@ -7,17 +7,19 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { objects, type WorkItem } from "@/data/objects";
+import { objects, type WorkItem, type Variant } from "@/data/objects";
 
-const STORAGE_KEY = "evegomy-cart-v1";
+const STORAGE_KEY = "evegomy-cart-v2";
 
 export type CartLine = {
   productId: string;
+  variantId?: string;
   quantity: number;
 };
 
 export type EnrichedLine = CartLine & {
   item: WorkItem;
+  variant: Variant | null;
   lineCents: number;
 };
 
@@ -27,15 +29,18 @@ type Ctx = {
   subtotalCents: number;
   itemCount: number;
   isOpen: boolean;
-  addItem: (productId: string, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addItem: (productId: string, variantId?: string, quantity?: number) => void;
+  removeItem: (productId: string, variantId?: string) => void;
+  updateQuantity: (productId: string, variantId: string | undefined, quantity: number) => void;
   clear: () => void;
   openCart: () => void;
   closeCart: () => void;
 };
 
 const CartContext = createContext<Ctx | null>(null);
+
+const sameLine = (a: CartLine, productId: string, variantId?: string) =>
+  a.productId === productId && (a.variantId ?? null) === (variantId ?? null);
 
 function loadInitial(): CartLine[] {
   if (typeof window === "undefined") return [];
@@ -65,35 +70,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [lines]);
 
-  const addItem = useCallback((productId: string, quantity = 1) => {
+  const addItem = useCallback((productId: string, variantId?: string, quantity = 1) => {
     setLines((prev) => {
-      const found = prev.find((l) => l.productId === productId);
+      const found = prev.find((l) => sameLine(l, productId, variantId));
       if (found) {
         return prev.map((l) =>
-          l.productId === productId
+          sameLine(l, productId, variantId)
             ? { ...l, quantity: Math.min(5, l.quantity + quantity) }
             : l
         );
       }
-      return [...prev, { productId, quantity }];
+      return [...prev, { productId, variantId, quantity }];
     });
     setIsOpen(true);
   }, []);
 
-  const removeItem = useCallback((productId: string) => {
-    setLines((prev) => prev.filter((l) => l.productId !== productId));
+  const removeItem = useCallback((productId: string, variantId?: string) => {
+    setLines((prev) => prev.filter((l) => !sameLine(l, productId, variantId)));
   }, []);
 
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
-    setLines((prev) => {
-      if (quantity <= 0) return prev.filter((l) => l.productId !== productId);
-      return prev.map((l) =>
-        l.productId === productId
-          ? { ...l, quantity: Math.min(5, quantity) }
-          : l
-      );
-    });
-  }, []);
+  const updateQuantity = useCallback(
+    (productId: string, variantId: string | undefined, quantity: number) => {
+      setLines((prev) => {
+        if (quantity <= 0) return prev.filter((l) => !sameLine(l, productId, variantId));
+        return prev.map((l) =>
+          sameLine(l, productId, variantId)
+            ? { ...l, quantity: Math.min(5, quantity) }
+            : l
+        );
+      });
+    },
+    []
+  );
 
   const clear = useCallback(() => setLines([]), []);
   const openCart = useCallback(() => setIsOpen(true), []);
@@ -104,9 +112,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       .map((line) => {
         const item = objects.find((o) => o.id === line.productId);
         if (!item || !item.priceCents) return null;
+        const variant =
+          line.variantId && item.variants
+            ? item.variants.find((v) => v.id === line.variantId) ?? null
+            : null;
         return {
           ...line,
           item,
+          variant,
           lineCents: item.priceCents * line.quantity,
         };
       })

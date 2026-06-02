@@ -2,6 +2,13 @@ import type { Locale } from "@/i18n";
 
 export type ObjectCategory = "Posters" | "Foulards" | "Skateboards" | "Collaborations";
 
+export type Variant = {
+  id: string;
+  name: Record<Locale, string>;
+  image: string;
+  editionRemaining?: number;
+};
+
 export type WorkItem = {
   id: string;
   category: ObjectCategory;
@@ -10,6 +17,8 @@ export type WorkItem = {
   longDescription?: Record<Locale, string>;
   details?: { label: Record<Locale, string>; value: Record<Locale, string> }[];
   images: string[];
+  /** Optional variants — each is a distinct print/colorway sold at the same price. */
+  variants?: Variant[];
   blurred?: boolean;
   comingSoon?: boolean;
   priceCents?: number;
@@ -21,6 +30,14 @@ export type WorkItem = {
   madeToOrder?: boolean;
   leadTime?: Record<Locale, string>;
 };
+
+/** Returns the images to display for a work item — variant images when present, else the flat list. */
+export function workItemImages(item: WorkItem): string[] {
+  if (item.variants && item.variants.length > 0) {
+    return item.variants.map((v) => v.image);
+  }
+  return item.images;
+}
 
 // Reusable detail blocks
 const SHIPPING = {
@@ -123,13 +140,28 @@ export const objects: WorkItem[] = [
       en: "Giclée pigment print on Hahnemühle 308gsm fine-art paper. Archival inks, delicate matte finish. Each piece is hand-signed and numbered on the back by Eve.",
       es: "Impresión giclée pigmentaria en papel de arte Hahnemühle 308gsm. Colores duraderos, acabado mate delicado. Cada ejemplar está firmado a mano y numerado al dorso por Eve.",
     },
-    images: [
-      "/placeholders/poster-bleu.jpg",
-      "/placeholders/bleu-oiseau.jpg",
-      "/placeholders/bleu-oiseau-2.jpg",
-      "/placeholders/bleu-hannah-1.jpg",
-      "/placeholders/bleu-hannah-2.jpg",
-      "/placeholders/bleu-thomas.jpg",
+    images: [],
+    variants: [
+      {
+        id: "hannah",
+        name: { fr: "Hannah", en: "Hannah", es: "Hannah" },
+        image: "/placeholders/bleu-hannah-1.jpg",
+      },
+      {
+        id: "hannah-detail",
+        name: { fr: "Hannah — détail", en: "Hannah — detail", es: "Hannah — detalle" },
+        image: "/placeholders/bleu-hannah-2.jpg",
+      },
+      {
+        id: "oiseau",
+        name: { fr: "Oiseau bleu", en: "Blue bird", es: "Pájaro azul" },
+        image: "/placeholders/bleu-oiseau.jpg",
+      },
+      {
+        id: "thomas",
+        name: { fr: "Thomas", en: "Thomas", es: "Thomas" },
+        image: "/placeholders/bleu-thomas.jpg",
+      },
     ],
     priceCents: 5000,
     currency: "EUR",
@@ -214,11 +246,23 @@ export const objects: WorkItem[] = [
       en: "From the Sleeping Girls series. Signed edition, numbered on the back.",
       es: "De la serie Niñas que duermen. Edición firmada, numerada al dorso.",
     },
-    images: [
-      "/placeholders/poster-filles.jpg",
-      "/placeholders/bleu-songes-1.jpg",
-      "/placeholders/bleu-songes-2.jpg",
-      "/placeholders/bleu-songes-3.jpg",
+    images: [],
+    variants: [
+      {
+        id: "songes-1",
+        name: { fr: "Songe I", en: "Dream I", es: "Sueño I" },
+        image: "/placeholders/bleu-songes-1.jpg",
+      },
+      {
+        id: "songes-2",
+        name: { fr: "Songe II", en: "Dream II", es: "Sueño II" },
+        image: "/placeholders/bleu-songes-2.jpg",
+      },
+      {
+        id: "songes-3",
+        name: { fr: "Songe III", en: "Dream III", es: "Sueño III" },
+        image: "/placeholders/bleu-songes-3.jpg",
+      },
     ],
     priceCents: 5000,
     currency: "EUR",
@@ -360,7 +404,6 @@ export const objects: WorkItem[] = [
     images: [
       "/placeholders/foulard-main.jpg",
       "/placeholders/foulard-photo.jpg",
-      "/placeholders/foulard-mockup.jpg",
     ],
     priceCents: 22000,
     currency: "EUR",
@@ -408,9 +451,7 @@ export const objects: WorkItem[] = [
       es: "Twill 100% seda natural, 16 mommes. Bordes enrollados a mano. Se presenta en una bolsa tejida con un certificado de autenticidad numerado.",
     },
     images: [
-      "/placeholders/foulard-photo.jpg",
       "/placeholders/foulard-mockup.jpg",
-      "/placeholders/foulard-main.jpg",
     ],
     priceCents: 22000,
     currency: "EUR",

@@ -4,7 +4,7 @@ import { useLocale } from "@/i18n";
 import { useT } from "@/i18n/strings";
 import { formatPrice, cn } from "@/lib/utils";
 
-async function startCheckout(items: { productId: string; quantity: number }[]) {
+async function startCheckout(items: { productId: string; variantId?: string; quantity: number }[]) {
   const res = await fetch("/api/create-checkout-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -21,11 +21,11 @@ async function startCheckout(items: { productId: string; quantity: number }[]) {
 export function CartDrawer() {
   const t = useT();
   const { locale } = useLocale();
-  const { isOpen, closeCart, enriched, subtotalCents, itemCount, removeItem, updateQuantity, lines } = useCart();
+  const { isOpen, closeCart, enriched, subtotalCents, itemCount, removeItem, updateQuantity, lines } =
+    useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Close on ESC
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -35,7 +35,6 @@ export function CartDrawer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, closeCart]);
 
-  // Lock body scroll while open
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
@@ -95,52 +94,56 @@ export function CartDrawer() {
             <p className="mt-12 text-center text-sm text-muted">{t.cart.empty}</p>
           ) : (
             <ul className="space-y-6">
-              {enriched.map((line) => (
-                <li key={line.productId} className="flex gap-4">
-                  <div className="aspect-square w-20 shrink-0 overflow-hidden bg-cream">
-                    <img
-                      src={line.item.images[0]}
-                      alt={line.item.title[locale]}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1">
-                    <div className="flex items-baseline justify-between gap-3">
-                      <p className="display text-base leading-tight">
-                        {line.item.title[locale]}
-                      </p>
-                      <span className="text-sm text-ink whitespace-nowrap">
-                        {formatPrice(line.lineCents, line.item.currency ?? "EUR")}
-                      </span>
+              {enriched.map((line) => {
+                const thumb = line.variant?.image ?? line.item.images[0];
+                return (
+                  <li key={`${line.productId}:${line.variantId ?? ""}`} className="flex gap-4">
+                    <div className="aspect-square w-20 shrink-0 overflow-hidden bg-cream">
+                      <img src={thumb} alt={line.item.title[locale]} className="h-full w-full object-cover" />
                     </div>
-                    <div className="mt-2 flex items-center gap-3 text-xs">
-                      <div className="flex items-center border border-line">
+                    <div className="flex flex-1 flex-col gap-1">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <p className="display text-base leading-tight">
+                          {line.item.title[locale]}
+                          {line.variant ? (
+                            <span className="block text-xs text-muted font-sans normal-case tracking-normal">
+                              {line.variant.name[locale]}
+                            </span>
+                          ) : null}
+                        </p>
+                        <span className="text-sm text-ink whitespace-nowrap">
+                          {formatPrice(line.lineCents, line.item.currency ?? "EUR")}
+                        </span>
+                      </div>
+                      <div className="mt-2 flex items-center gap-3 text-xs">
+                        <div className="flex items-center border border-line">
+                          <button
+                            onClick={() => updateQuantity(line.productId, line.variantId, line.quantity - 1)}
+                            className="px-2 py-1 text-muted hover:text-ink"
+                            aria-label="−"
+                          >
+                            −
+                          </button>
+                          <span className="min-w-[1.5rem] text-center">{line.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(line.productId, line.variantId, line.quantity + 1)}
+                            className="px-2 py-1 text-muted hover:text-ink"
+                            aria-label="+"
+                          >
+                            +
+                          </button>
+                        </div>
                         <button
-                          onClick={() => updateQuantity(line.productId, line.quantity - 1)}
-                          className="px-2 py-1 text-muted hover:text-ink"
-                          aria-label="−"
+                          onClick={() => removeItem(line.productId, line.variantId)}
+                          className="link-underline text-muted hover:text-ink"
                         >
-                          −
-                        </button>
-                        <span className="min-w-[1.5rem] text-center">{line.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(line.productId, line.quantity + 1)}
-                          className="px-2 py-1 text-muted hover:text-ink"
-                          aria-label="+"
-                        >
-                          +
+                          {t.cart.remove}
                         </button>
                       </div>
-                      <button
-                        onClick={() => removeItem(line.productId)}
-                        className="link-underline text-muted hover:text-ink"
-                      >
-                        {t.cart.remove}
-                      </button>
                     </div>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
@@ -150,14 +153,10 @@ export function CartDrawer() {
             <>
               <div className="flex items-baseline justify-between">
                 <span className="eyebrow">{t.cart.subtotal}</span>
-                <span className="display text-2xl">
-                  {formatPrice(subtotalCents, "EUR")}
-                </span>
+                <span className="display text-2xl">{formatPrice(subtotalCents, "EUR")}</span>
               </div>
               <p className="mt-1 text-xs text-muted">{t.cart.shippingNote}</p>
-              {error ? (
-                <p className="mt-3 text-xs text-terracotta">{error}</p>
-              ) : null}
+              {error ? <p className="mt-3 text-xs text-terracotta">{error}</p> : null}
               <div className="mt-5 flex flex-col gap-3">
                 <button
                   onClick={onCheckout}
