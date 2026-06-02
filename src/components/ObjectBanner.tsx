@@ -7,7 +7,11 @@ import { useT } from "@/i18n/strings";
 import { useCart } from "@/cart";
 import { ProjectBanner } from "@/components/ProjectBanner";
 
-function editionLine(item: WorkItem, t: ReturnType<typeof useT>, locale: ReturnType<typeof useLocale>["locale"]): string | null {
+function editionLine(
+  item: WorkItem,
+  t: ReturnType<typeof useT>,
+  locale: ReturnType<typeof useLocale>["locale"]
+): string | null {
   if (item.madeToOrder && item.leadTime) {
     return `${t.edition.madeToOrder} — ${item.leadTime[locale]}`;
   }
@@ -53,16 +57,19 @@ export function ObjectBanner({ item, reverse }: { item: WorkItem; reverse?: bool
           : undefined
       }
       meta={
-        ed ? (
-          <p className="mt-3 text-xs uppercase tracking-widest text-muted">{ed}</p>
+        ed ? <p className="mt-3 text-xs uppercase tracking-widest text-muted">{ed}</p> : null
+      }
+      imageOverlay={
+        item.comingSoon ? (
+          <div className="pointer-events-none absolute left-4 top-4 z-20">
+            <span className="bg-ink/85 px-3 py-1.5 text-[0.65rem] uppercase tracking-widest text-ivory backdrop-blur-sm">
+              {t.objects.comingSoon}
+            </span>
+          </div>
         ) : null
       }
       ctas={
-        item.comingSoon ? (
-          <span className="bg-ink/85 px-3 py-1.5 text-[0.65rem] uppercase tracking-widest text-ivory">
-            {t.objects.comingSoon}
-          </span>
-        ) : buyable ? (
+        buyable ? (
           <>
             <button
               onClick={onAdd}

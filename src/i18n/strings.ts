@@ -5,10 +5,10 @@ export type Strings = typeof strings.en;
 export const strings = {
   en: {
     nav: {
-      all: "All",
+      all: "Portfolio",
       books: "Books",
       shop: "Shop",
-      work: "All",
+      work: "Portfolio",
       objects: "Objects & collaborations",
       about: "About",
       contact: "Contact",
