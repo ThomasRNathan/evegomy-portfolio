@@ -10,43 +10,43 @@ export function Header() {
   const t = useT();
 
   const links = [
-    { to: "/shop", label: t.nav.shop, accent: true },
-    { to: "/work", label: t.nav.work },
+    { to: "/", label: t.nav.all, end: true },
     { to: "/books", label: t.nav.books },
-    { to: "/objects", label: t.nav.objects },
-    { to: "/about", label: t.nav.about },
-    { to: "/contact", label: t.nav.contact },
+    { to: "/shop", label: t.nav.shop },
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/60 bg-ivory/80 backdrop-blur">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-6 py-5 md:px-10">
-        <Link to="/" className="display text-2xl md:text-3xl leading-none whitespace-nowrap">
+    <header className="sticky top-0 z-40 border-b border-line/60 bg-ivory/85 backdrop-blur-md">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-3 items-center gap-4 px-6 py-4 md:px-10 md:py-5">
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src="/logo.svg"
+              alt=""
+              className="h-9 w-auto md:h-11"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </Link>
+        </div>
+
+        {/* Big name — centered */}
+        <Link
+          to="/"
+          className="display whitespace-nowrap text-center text-2xl leading-none md:text-4xl lg:text-5xl"
+        >
           Eve Gomy
         </Link>
-        <nav className="hidden flex-wrap items-baseline gap-x-5 gap-y-2 md:flex lg:gap-x-7">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className={({ isActive }) =>
-                cn(
-                  "link-underline whitespace-nowrap text-sm tracking-wider",
-                  isActive ? "text-ink" : "text-muted hover:text-ink",
-                  l.accent && !isActive ? "text-ink" : ""
-                )
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="flex items-center gap-3 text-[0.7rem] tracking-widest text-muted">
+
+        {/* Utility cluster — right */}
+        <div className="flex items-center justify-end gap-3 text-[0.7rem] tracking-widest text-muted">
           <button
             type="button"
             onClick={openCart}
             aria-label={`${t.cart.title} (${itemCount})`}
-            className="relative inline-flex items-center text-lg leading-none hover:scale-110 transition-transform"
+            className="relative inline-flex items-center text-lg leading-none transition-transform hover:scale-110"
           >
             <span aria-hidden>🛒</span>
             {itemCount > 0 ? (
@@ -73,21 +73,26 @@ export function Header() {
           ))}
         </div>
       </div>
-      <nav className="flex flex-wrap gap-x-4 gap-y-2 border-t border-line/40 px-6 py-3 md:hidden">
-        {links.map((l) => (
-          <NavLink
-            key={l.to}
-            to={l.to}
-            className={({ isActive }) =>
-              cn(
-                "text-xs tracking-wider",
-                isActive ? "text-ink" : "text-muted"
-              )
-            }
-          >
-            {l.label}
-          </NavLink>
-        ))}
+
+      {/* Section nav — centered, lezedh-style */}
+      <nav className="border-t border-line/40">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-center gap-10 px-6 py-3 md:gap-16 md:px-10">
+          {links.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.end}
+              className={({ isActive }) =>
+                cn(
+                  "link-underline whitespace-nowrap text-xs uppercase tracking-widest md:text-sm",
+                  isActive ? "text-ink" : "text-muted hover:text-ink"
+                )
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </div>
       </nav>
     </header>
   );

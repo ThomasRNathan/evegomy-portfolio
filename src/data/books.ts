@@ -20,6 +20,8 @@ export type Book = {
   publisher: string;
   description: Record<Locale, string>;
   cover: string;
+  /** Optional gallery (cover first if provided). Falls back to [cover]. */
+  images?: string[];
   translations?: Translation[];
   purchaseLinks?: PurchaseLink[];
 };
@@ -37,6 +39,13 @@ export const books: Book[] = [
       es: "Un álbum sobre la diferencia y la diversidad, contado por una naturaleza luminosa y envolvente. Debut de Eve como autora e ilustradora.",
     },
     cover: "/placeholders/eve-dans-la-nature.jpg",
+    images: [
+      "/placeholders/eve-dans-la-nature.jpg",
+      "/placeholders/eve-dln-soleil-pluie.jpg",
+      "/placeholders/eve-dln-petits.jpg",
+      "/placeholders/eve-dln-armee.jpg",
+      "/placeholders/eve-dln-couv.jpg",
+    ],
     purchaseLinks: [
       { retailer: "Didier Jeunesse", url: "https://www.didier-jeunesse.com/livre/dans-la-nature-9782278128563/", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/a20961220/Eve-Gomy-Dans-la-nature", region: "FR" },
@@ -55,6 +64,7 @@ export const books: Book[] = [
       es: "Libro-CD para descubrir Las Cuatro Estaciones de Vivaldi. Cada concierto se acompaña de un poema y las ilustraciones poéticas de Eve Gomy invitan a contemplar el paso de las estaciones. Desde 5 años.",
     },
     cover: "/placeholders/eve-quatre-saisons.jpg",
+    images: ["/placeholders/eve-quatre-saisons.jpg"],
     purchaseLinks: [
       { retailer: "ACCÈS Éditions", url: "https://acces-editions.com/produits/les-quatre-saisons", region: "FR" },
       { retailer: "FNAC", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=eve+gomy+quatre+saisons", region: "FR" },
@@ -73,6 +83,14 @@ export const books: Book[] = [
       es: "Un gato enamorado del amarillo — el primero de un cuarteto de libros cartoné que celebran un color para los más pequeños.",
     },
     cover: "/placeholders/eve-chat-jaune.jpg",
+    images: [
+      "/placeholders/eve-chat-jaune.jpg",
+      "/placeholders/m-9.jpg",
+      "/placeholders/m-2.jpg",
+      "/placeholders/chat-jaune-citrons.jpg",
+      "/placeholders/chat-jaune-poissons.jpg",
+      "/placeholders/chat-jaune-photo.jpg",
+    ],
     translations: [
       { lang: "Italian", title: "Il gatto che amava il giallo", publisher: "Franco Cosimo Panini" },
     ],
@@ -93,6 +111,15 @@ export const books: Book[] = [
       es: "Una rana atraída por el rojo. Cada doble página es una meditación sobre un color, para los más pequeños.",
     },
     cover: "/placeholders/eve-grenouille-rouge.jpg",
+    images: [
+      "/placeholders/eve-grenouille-rouge.jpg",
+      "/placeholders/grenouille-coquelicot.jpg",
+      "/placeholders/grenouille-coccinelle.jpg",
+      "/placeholders/grenouille-nenuphar.jpg",
+      "/placeholders/grenouille-champignon.jpg",
+      "/placeholders/grenouille-tomates.jpg",
+      "/placeholders/grenouille-poissons-koi.jpg",
+    ],
     translations: [
       { lang: "Italian", title: "La rana che amava il rosso", publisher: "Franco Cosimo Panini" },
     ],
@@ -113,6 +140,14 @@ export const books: Book[] = [
       es: "Una ardilla y el azul del cielo, el agua y el ocaso.",
     },
     cover: "/placeholders/eve-ecureuil-bleu.jpg",
+    images: [
+      "/placeholders/eve-ecureuil-bleu.jpg",
+      "/placeholders/ecureuil-oiseau.jpg",
+      "/placeholders/ecureuil-champignon.jpg",
+      "/placeholders/ecureuil-loli.jpg",
+      "/placeholders/ecureuil-loluxx.jpg",
+      "/placeholders/ecureuil-photo.jpg",
+    ],
     translations: [
       { lang: "Italian", title: "Lo scoiattolo che amava il blu", publisher: "Franco Cosimo Panini" },
     ],
@@ -133,6 +168,10 @@ export const books: Book[] = [
       es: "Un ratoncito y el rosa — pétalos, alba, el interior de una caracola.",
     },
     cover: "/placeholders/eve-souris-rose.jpg",
+    images: [
+      "/placeholders/eve-souris-rose.jpg",
+      "/placeholders/souris-rose-photo.jpg",
+    ],
     translations: [
       { lang: "Italian", title: "Il topino che amava il rosa", publisher: "Franco Cosimo Panini" },
     ],

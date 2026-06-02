@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" aria-hidden="true">
+  <g fill="#1F1B16">
+    <!-- ears -->
+    <path d="M148 38 L152 8 L161 36 Z"/>
+    <path d="M162 36 L172 8 L176 40 Z"/>
+    <!-- head -->
+    <ellipse cx="161" cy="56" rx="22" ry="18"/>
+    <!-- snout -->
+    <path d="M173 54 Q193 52 192 64 Q191 73 175 72 Z"/>
+    <!-- body -->
+    <path d="M50 62 Q56 56 80 56 L140 56 Q150 56 152 70 L152 108 Q152 118 142 118 L60 118 Q48 118 44 108 L40 80 Q40 66 50 62 Z"/>
+    <!-- legs front -->
+    <rect x="60" y="115" width="11" height="34"/>
+    <rect x="78" y="115" width="11" height="34"/>
+    <!-- legs back -->
+    <rect x="124" y="115" width="11" height="34"/>
+    <rect x="142" y="115" width="11" height="34"/>
+    <!-- tail -->
+    <path d="M40 76 Q22 84 24 102 L30 100 Q28 88 44 86 Z"/>
+    <!-- mane -->
+    <path d="M138 50 Q142 38 150 42 L150 60 Z"/>
+  </g>
+  <!-- eye -->
+  <circle cx="168" cy="51" r="1.7" fill="#FAF7F2"/>
+  <!-- characteristic white belly stripe (like the attached image) -->
+  <rect x="50" y="85" width="98" height="7" fill="#FAF7F2"/>
+</svg>

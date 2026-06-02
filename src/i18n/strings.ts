@@ -5,9 +5,10 @@ export type Strings = typeof strings.en;
 export const strings = {
   en: {
     nav: {
-      shop: "Shop",
-      work: "All Work",
+      all: "All",
       books: "Books",
+      shop: "Shop",
+      work: "All",
       objects: "Objects & collaborations",
       about: "About",
       contact: "Contact",
@@ -130,9 +131,10 @@ export const strings = {
   },
   fr: {
     nav: {
-      shop: "Boutique",
-      work: "Portfolio",
+      all: "Portfolio",
       books: "Livres",
+      shop: "Shop",
+      work: "Portfolio",
       objects: "Objets & collaborations",
       about: "À propos",
       contact: "Contact",
@@ -255,9 +257,10 @@ export const strings = {
   },
   es: {
     nav: {
-      shop: "Tienda",
-      work: "Portfolio",
+      all: "Portfolio",
       books: "Libros",
+      shop: "Shop",
+      work: "Portfolio",
       objects: "Objetos y colaboraciones",
       about: "Acerca",
       contact: "Contacto",

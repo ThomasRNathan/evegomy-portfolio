@@ -1,0 +1,121 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+
+type CarouselImage = {
+  src: string;
+  alt: string;
+};
+
+export function Carousel({
+  images,
+  aspect = "aspect-[4/3]",
+  blurred = false,
+}: {
+  images: CarouselImage[];
+  aspect?: string;
+  blurred?: boolean;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const updateButtons = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanPrev(el.scrollLeft > 4);
+    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    updateButtons();
+    const el = trackRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateButtons, { passive: true });
+    window.addEventListener("resize", updateButtons);
+    return () => {
+      el.removeEventListener("scroll", updateButtons);
+      window.removeEventListener("resize", updateButtons);
+    };
+  }, [updateButtons, images.length]);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const slide = el.querySelector<HTMLElement>("[data-slide]");
+    const step = slide ? slide.offsetWidth + 16 : el.clientWidth * 0.85;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
+  if (images.length === 0) return null;
+  const single = images.length === 1;
+
+  return (
+    <div className="relative">
+      <div
+        ref={trackRef}
+        className={cn(
+          "flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth",
+          "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        )}
+      >
+        {images.map((img, i) => (
+          <figure
+            key={i}
+            data-slide
+            className={cn(
+              "relative shrink-0 snap-start overflow-hidden bg-cream",
+              aspect,
+              single ? "w-full" : "w-[88%] sm:w-[72%] md:w-[78%] lg:w-[82%]"
+            )}
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              loading={i === 0 ? "eager" : "lazy"}
+              className={cn(
+                "h-full w-full object-cover",
+                blurred && "scale-110 blur-2xl"
+              )}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </figure>
+        ))}
+      </div>
+
+      {!single ? (
+        <>
+          <button
+            type="button"
+            aria-label="Previous"
+            onClick={() => scrollBy(-1)}
+            disabled={!canPrev}
+            className={cn(
+              "absolute left-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink backdrop-blur transition-opacity hover:bg-ivory",
+              !canPrev && "pointer-events-none opacity-0"
+            )}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+              <path d="M9 1L3 7L9 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Next"
+            onClick={() => scrollBy(1)}
+            disabled={!canNext}
+            className={cn(
+              "absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink backdrop-blur transition-opacity hover:bg-ivory",
+              !canNext && "pointer-events-none opacity-0"
+            )}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+              <path d="M5 1L11 7L5 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </>
+      ) : null}
+    </div>
+  );
+}
