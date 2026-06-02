@@ -73,7 +73,7 @@ export function Carousel({
               alt={img.alt}
               loading={i === 0 ? "eager" : "lazy"}
               className={cn(
-                "h-full w-full object-cover",
+                "h-full w-full object-contain",
                 blurred && "scale-110 blur-2xl"
               )}
               onError={(e) => {
